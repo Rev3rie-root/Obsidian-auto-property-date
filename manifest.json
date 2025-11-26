@@ -3,7 +3,7 @@
   "name": "Auto Created Date",
   "version": "1.0.0",
   "minAppVersion": "1.0.0",
-  "author": "Xyl",
+  "author": "Quincy",
   "description": "Automatically adds a created date to new notes.",
   "isDesktopOnly": false
 }
