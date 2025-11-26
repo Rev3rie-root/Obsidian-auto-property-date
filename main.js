@@ -21,7 +21,7 @@ module.exports = class CreatedDatePlugin extends Plugin {
           }
           
           const date = moment().format('YYYY-MM-DD');
-          const time = moment().format('HH:mm a');
+          const time = moment().format('hh:mm a');
           
           if (!content.startsWith('---')) {
             // No frontmatter, add it
