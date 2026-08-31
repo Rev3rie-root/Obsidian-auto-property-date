@@ -5,15 +5,12 @@ function sleep(ms) {
 }
 
 module.exports = class CreatedDatePlugin extends Plugin {
+
   onload() {
     this.registerEvent(
       this.app.vault.on('create', async (file) => {
         // Only work with Markdown files.
         if (file.extension !== 'md') return;
-
-        // Ignore files that are not genuinely new.
-        const ageMs = Date.now() - file.stat.ctime;
-        if (ageMs > 3000) return;
 
         // Give templates and other plugins a moment to finish.
         await sleep(100);
@@ -28,6 +25,16 @@ module.exports = class CreatedDatePlugin extends Plugin {
         const frontmatterText = frontmatterMatch
           ? frontmatterMatch[1]
           : '';
+
+        // Whatever is left after stripping frontmatter is the "body".
+        const bodyText = frontmatterMatch
+          ? content.slice(frontmatterMatch[0].length)
+          : content;
+
+        // If there's real body content, this almost certainly isn't a
+        // brand-new blank note — likely an old file moved into the vault.
+        // Leave it alone rather than risk stamping it with today's date.
+        if (bodyText.trim().length > 0) return;
 
         // Check the two properties separately.
         const hasCreated = /^created\s*:/m.test(frontmatterText);
